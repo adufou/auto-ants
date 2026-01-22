@@ -1,9 +1,18 @@
 use bevy::prelude::*;
 
+pub struct HelloPlugin;
+
+impl Plugin for HelloPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, add_people);
+        app.add_systems(Update, (hello_world, (update_people, greet_people).chain()));
+    }
+}
+
 fn main() {
     App::new()
-        .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
+        .add_plugins(DefaultPlugins)
+        .add_plugins(HelloPlugin)
         .run();
 }
 
