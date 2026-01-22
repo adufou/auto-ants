@@ -1,9 +1,9 @@
 use bevy::prelude::*;
 
 mod components;
+mod plugins;
 mod resources;
 mod systems;
-mod plugins;
 
 use plugins::HelloPlugin;
 
