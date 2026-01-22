@@ -1,7 +1,8 @@
 use crate::components::{ChunkPosition, GrassTile, WaterTile};
-use crate::resources::{ChunkManager, TerrainConfig, TilemapAssets};
+use crate::resources::{ChunkCoord, ChunkManager, TerrainConfig, TilemapAssets};
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
+use super::helpers::get_camera_chunk;
 
 pub fn generate_chunks(
     mut commands: Commands,
@@ -10,13 +11,9 @@ pub fn generate_chunks(
     config: Res<TerrainConfig>,
     tilemap_assets: Res<TilemapAssets>,
 ) {
-    if camera_query.is_empty() {
-        return; // No camera yet
-    }
-
-    let camera_chunk = match camera_query.single() {
-        Ok(chunk) => chunk,
-        Err(_) => return,
+    let camera_chunk = match get_camera_chunk(&camera_query) {
+        Some(chunk) => chunk,
+        None => return,
     };
 
     // Calculate which chunks should be visible
@@ -52,7 +49,7 @@ pub fn generate_chunks(
 
 fn spawn_chunk(
     commands: &mut Commands,
-    chunk_coord: crate::resources::ChunkCoord,
+    chunk_coord: ChunkCoord,
     config: &TerrainConfig,
     assets: &TilemapAssets,
     chunk_manager: &ChunkManager,

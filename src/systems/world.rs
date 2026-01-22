@@ -7,6 +7,8 @@ pub use despawn_chunks::despawn_chunks;
 mod generate_chunks;
 pub use generate_chunks::generate_chunks;
 
+mod helpers;
+
 mod performance_monitor;
 pub use performance_monitor::performance_monitor;
 

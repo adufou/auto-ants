@@ -1,20 +1,17 @@
 use crate::components::ChunkPosition;
-use crate::resources::ChunkManager;
+use crate::resources::{ChunkManager, TerrainConfig};
 use bevy::prelude::*;
+use super::helpers::get_camera_chunk;
 
 pub fn despawn_chunks(
     mut commands: Commands,
     camera_query: Query<&ChunkPosition, With<Camera2d>>,
     mut chunk_manager: ResMut<ChunkManager>,
-    config: Res<crate::resources::TerrainConfig>,
+    config: Res<TerrainConfig>,
 ) {
-    if camera_query.is_empty() {
-        return;
-    }
-
-    let camera_chunk = match camera_query.single() {
-        Ok(chunk) => chunk,
-        Err(_) => return,
+    let camera_chunk = match get_camera_chunk(&camera_query) {
+        Some(chunk) => chunk,
+        None => return,
     };
 
     let visible_chunks = chunk_manager.calculate_visible_chunks(
