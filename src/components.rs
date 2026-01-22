@@ -1,5 +1,5 @@
-mod person;
-pub use person::Person;
+mod tile_markers;
+pub use tile_markers::{GrassTile, WaterTile};
 
-mod name;
-pub use name::Name;
+mod camera_tracking;
+pub use camera_tracking::ChunkPosition;

@@ -1,3 +1,2 @@
-mod hello_plugin;
-
-pub use hello_plugin::HelloPlugin;
+mod world_plugin;
+pub use world_plugin::WorldPlugin;
