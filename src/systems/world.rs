@@ -12,8 +12,17 @@ mod helpers;
 mod performance_monitor;
 pub use performance_monitor::performance_monitor;
 
+mod random_walk_movement;
+pub use random_walk_movement::random_walk_movement;
+
+mod setup_entities;
+pub use setup_entities::setup_entities;
+
 mod setup_tilemap;
 pub use setup_tilemap::setup_tilemap;
+
+mod spawn_ant;
+pub use spawn_ant::spawn_ant;
 
 mod terrain_tuning;
 pub use terrain_tuning::terrain_tuning;
