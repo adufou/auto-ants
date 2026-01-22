@@ -5,7 +5,7 @@ pub struct HelloPlugin;
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, add_people);
-        app.add_systems(Update, (hello_world, (update_people, greet_people).chain()));
+        app.add_systems(Update, (update_people, greet_people).chain());
     }
 }
 
@@ -14,10 +14,6 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugins(HelloPlugin)
         .run();
-}
-
-fn hello_world() {
-    println!("hello world!");
 }
 
 #[derive(Component)]
