@@ -10,9 +10,9 @@ pub fn greet_people(
 ) {
     // update our timer with the time elapsed since the last update
     // if that caused the timer to finish, we say hello to everyone
-    if timer.0.tick(time.delta()).just_finished() {
+    if timer.timer.tick(time.delta()).just_finished() {
         for name in &query {
-            println!("hello {}!", name.0);
+            println!("hello {}!", name.value);
         }
     }
 }

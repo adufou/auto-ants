@@ -1,4 +1,6 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
-pub struct Name(pub String);
+pub struct Name {
+    pub value: String,
+}

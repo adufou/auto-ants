@@ -1,4 +1,6 @@
 use bevy::prelude::*;
 
 #[derive(Resource)]
-pub struct GreetTimer(pub Timer);
+pub struct GreetTimer {
+    pub timer: Timer,
+}
