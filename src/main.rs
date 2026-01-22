@@ -1,5 +1,8 @@
 use bevy::prelude::*;
 
+mod components;
+use components::Person;
+
 pub struct HelloPlugin;
 
 impl Plugin for HelloPlugin {
@@ -16,9 +19,6 @@ fn main() {
         .add_plugins(HelloPlugin)
         .run();
 }
-
-#[derive(Component)]
-struct Person;
 
 #[derive(Component)]
 struct Name(String);
