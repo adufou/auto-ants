@@ -1,2 +1,2 @@
-mod update_relationships;
-pub use update_relationships::update_relationships;
+mod update_close_humans_relationships;
+pub use update_close_humans_relationships::update_close_humans_relationships;

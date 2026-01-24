@@ -11,7 +11,7 @@ const BASE_CHANGE_AMOUNT: f32 = 0.05;
 
 /// System that updates relationships between nearby humans
 /// Runs every frame for humans within 32px of each other
-pub fn update_relationships(
+pub fn update_close_humans_relationships(
     mut humans: Query<(Entity, &Transform, &mut HumanRelationships), With<Human>>,
     spatial_grid: Res<SpatialGrid>,
     time: Res<Time>,
