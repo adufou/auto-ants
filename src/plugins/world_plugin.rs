@@ -7,6 +7,7 @@ use crate::systems::world::{
     apply_movement, calculate_random_walk, generate_world, resolve_movement, setup_entities,
     setup_tilemap, spawn_human, update_spatial_grid,
 };
+use avian2d::prelude::*;
 use bevy::prelude::*;
 
 pub struct WorldPlugin;
@@ -33,15 +34,20 @@ impl Plugin for WorldPlugin {
                 performance_monitor,
                 vision_debug_gizmos,
                 spawn_human,
-                // New movement pipeline (replaces random_walk_movement)
-                (
-                    update_spatial_grid,
-                    calculate_random_walk,
-                    (resolve_movement, apply_movement).chain(),
-                )
-                    .chain(),
             ),
-        ); // Independent systems
+        );
+
+        // Movement pipeline - runs before Avian physics
+        app.add_systems(
+            Update,
+            (
+                update_spatial_grid,
+                calculate_random_walk,
+                (resolve_movement, apply_movement).chain(),
+            )
+                .chain()
+                .before(PhysicsSystems::StepSimulation),
+        );
 
         // Camera controls chain
         app.add_systems(

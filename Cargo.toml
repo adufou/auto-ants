@@ -1,12 +1,13 @@
 [package]
-name = "auto-ants"
-version = "0.1.0"
+name = "auto-cult"
+version = "0.0.1"
 edition = "2024"
 
 [dependencies]
 bevy = { version = "0.18.0", features = ["dynamic_linking"] }
 bevy_ecs_tilemap = "0.18.0-rc.1"
 bevy_immediate = "0.5"
+avian2d = "0.5"
 noise = "0.9.0"
 rand = "0.8"
 
