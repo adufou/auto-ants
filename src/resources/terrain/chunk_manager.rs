@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use noise::{NoiseFn, Perlin};
 use std::collections::{HashMap, HashSet};
 
-use crate::resources::terrain_config::{WORLD_MAX_CHUNK, WORLD_MIN_CHUNK};
+use super::terrain_config::{WORLD_MAX_CHUNK, WORLD_MIN_CHUNK};
 
 /// Chunk coordinate in world space
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

@@ -1,20 +1,8 @@
-mod tile_markers;
-pub use tile_markers::{GrassTile, WaterTile};
+pub mod markers;
+pub mod camera;
+pub mod movement;
 
-mod camera_tracking;
-pub use camera_tracking::ChunkPosition;
-
-mod human_marker;
-pub use human_marker::Human;
-
-mod movement_velocity;
-pub use movement_velocity::MovementVelocity;
-
-mod random_walk_influence;
-pub use random_walk_influence::RandomWalkInfluence;
-
-mod cohesion_influence;
-pub use cohesion_influence::CohesionInfluence;
-
-mod current_direction;
-pub use current_direction::CurrentDirection;
+// Re-export all public items
+pub use markers::{GrassTile, WaterTile, Human};
+pub use camera::ChunkPosition;
+pub use movement::{MovementVelocity, RandomWalkInfluence, CohesionInfluence, CurrentDirection};
