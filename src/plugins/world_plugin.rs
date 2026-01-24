@@ -1,6 +1,6 @@
-use crate::resources::{ChunkManager, TerrainConfig};
+use crate::resources::{CameraConfig, ChunkManager, TerrainConfig};
 use crate::systems::world::{
-    camera_controls, generate_world, performance_monitor, random_walk_movement,
+    camera_controls, camera_zoom, generate_world, performance_monitor, random_walk_movement,
     setup_entities, setup_tilemap, spawn_human, terrain_tuning, track_camera_chunk,
 };
 use bevy::prelude::*;
@@ -10,6 +10,7 @@ pub struct WorldPlugin;
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
         // Insert resources
+        app.insert_resource(CameraConfig::default());
         app.insert_resource(TerrainConfig::default());
         app.insert_resource(ChunkManager::new(12345));
 
@@ -33,6 +34,7 @@ impl Plugin for WorldPlugin {
             Update,
             (
                 camera_controls,    // Move camera with WASD
+                camera_zoom,        // Zoom camera with mouse wheel
                 track_camera_chunk, // Update camera's chunk position
             )
                 .chain(),

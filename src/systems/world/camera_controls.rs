@@ -1,14 +1,14 @@
 use bevy::prelude::*;
-use crate::resources::TerrainConfig;
+use crate::resources::{CameraConfig, TerrainConfig};
 
 /// Camera movement system with world bounds
 pub fn camera_controls(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut camera_query: Query<&mut Transform, With<Camera2d>>,
     time: Res<Time>,
-    config: Res<TerrainConfig>,
+    camera_config: Res<CameraConfig>,
+    terrain_config: Res<TerrainConfig>,
 ) {
-    const SPEED: f32 = 200.0; // pixels per second
     const MOVEMENT_KEYS: &[(KeyCode, f32, f32)] = &[
         (KeyCode::KeyW, 0.0, 1.0),   // Up
         (KeyCode::KeyS, 0.0, -1.0),  // Down
@@ -17,7 +17,7 @@ pub fn camera_controls(
     ];
 
     // Calculate world bounds: 8 chunks * 16 tiles * 16 pixels = 2048
-    let half_world_pixels = (8 * config.chunk_size * 16) as f32;
+    let half_world_pixels = (8 * terrain_config.chunk_size * 16) as f32;
 
     for mut transform in &mut camera_query {
         let mut velocity = Vec3::ZERO;
@@ -30,7 +30,7 @@ pub fn camera_controls(
         }
 
         if velocity != Vec3::ZERO {
-            transform.translation += velocity.normalize() * SPEED * time.delta_secs();
+            transform.translation += velocity.normalize() * camera_config.movement_speed * time.delta_secs();
         }
 
         // Clamp camera position to world bounds

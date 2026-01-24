@@ -1,6 +1,9 @@
 mod camera_controls;
 pub use camera_controls::camera_controls;
 
+mod camera_zoom;
+pub use camera_zoom::camera_zoom;
+
 mod generate_chunks;
 pub use generate_chunks::generate_world;
 

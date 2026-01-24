@@ -1,3 +1,6 @@
+mod camera_config;
+pub use camera_config::CameraConfig;
+
 mod terrain_config;
 pub use terrain_config::TerrainConfig;
 
