@@ -9,6 +9,3 @@ pub use human_info_window::{
 
 pub mod human_selection;
 pub use human_selection::handle_human_click;
-
-pub mod test_floating_window;
-pub use test_floating_window::{handle_test_window_close, spawn_test_window};

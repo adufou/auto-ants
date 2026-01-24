@@ -1,9 +1,8 @@
-use crate::components::ui::{DebugUiRoot, HumanInfoWindowRoot, TestFloatingWindowRoot};
+use crate::components::ui::{DebugUiRoot, HumanInfoWindowRoot};
 use crate::resources::SelectedHuman;
 use crate::systems::ui::{
-    handle_checkbox_interaction, handle_human_click, handle_human_info_close,
-    handle_test_window_close, spawn_debug_ui, spawn_human_info_window, spawn_test_window,
-    update_human_info_content, validate_selected_human,
+    handle_checkbox_interaction, handle_human_click, handle_human_info_close, spawn_debug_ui,
+    spawn_human_info_window, update_human_info_content, validate_selected_human,
 };
 use crate::ui_constructs::CapsUi;
 use bevy::prelude::*;
@@ -24,16 +23,14 @@ impl Plugin for UiPlugin {
             .add_plugins(FloatingUiFocusPlugin)
             // Add bevy_immediate plugins for our UI
             .add_plugins(BevyImmediateAttachPlugin::<CapsUi, DebugUiRoot>::new())
-            .add_plugins(BevyImmediateAttachPlugin::<CapsUi, TestFloatingWindowRoot>::new())
             .add_plugins(BevyImmediateAttachPlugin::<CapsUi, HumanInfoWindowRoot>::new())
             // Spawn the UI on startup
-            .add_systems(Startup, (spawn_debug_ui, spawn_test_window))
+            .add_systems(Startup, spawn_debug_ui)
             // Add interaction systems
             .add_systems(
                 Update,
                 (
                     handle_checkbox_interaction,
-                    handle_test_window_close,
                     handle_human_click,
                     validate_selected_human.after(handle_human_click),
                     spawn_human_info_window.after(validate_selected_human),
