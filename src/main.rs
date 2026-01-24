@@ -5,6 +5,7 @@ mod components;
 mod plugins;
 mod resources;
 mod systems;
+mod ui;
 
 use plugins::{UiPlugin, WorldPlugin};
 

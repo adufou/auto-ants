@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(cargo build:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(cargo check:*)"
     ]
   }
 }
