@@ -1,5 +1,6 @@
 use crate::components::{
-    CohesionInfluence, CurrentDirection, Human, MovementVelocity, RandomWalkInfluence,
+    CohesionInfluence, CurrentDirection, DesiredDirection, Human, MovementVelocity,
+    RandomWalkInfluence,
 };
 use crate::resources::{MovementConfig, SpatialGrid};
 use bevy::prelude::*;
@@ -15,6 +16,7 @@ pub fn resolve_movement(
             &Transform,
             &mut MovementVelocity,
             &mut CurrentDirection,
+            &mut DesiredDirection,
             &RandomWalkInfluence,
             Option<&CohesionInfluence>,
         ),
@@ -27,7 +29,15 @@ pub fn resolve_movement(
 ) {
     let dt = time.delta_secs();
 
-    for (entity, transform, mut velocity, mut current_dir, random_walk, cohesion_opt) in &mut query
+    for (
+        entity,
+        transform,
+        mut velocity,
+        mut current_dir,
+        mut desired_dir,
+        random_walk,
+        cohesion_opt,
+    ) in &mut query
     {
         // Step 1: Calculate DESIRED direction from all influences
         let mut combined_direction = Vec2::ZERO;
@@ -50,6 +60,9 @@ pub fn resolve_movement(
         } else {
             Vec2::ZERO
         };
+
+        // Store desired direction for visualization
+        desired_dir.direction = desired_direction;
 
         // Step 2: Rotate current direction toward desired direction with max rate
         if desired_direction.length_squared() > 0.001 {

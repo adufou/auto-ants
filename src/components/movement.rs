@@ -9,3 +9,6 @@ pub use cohesion_influence::CohesionInfluence;
 
 mod current_direction;
 pub use current_direction::CurrentDirection;
+
+mod desired_direction;
+pub use desired_direction::DesiredDirection;

@@ -1,5 +1,6 @@
 use crate::components::{
-    CohesionInfluence, CurrentDirection, Human, MovementVelocity, RandomWalkInfluence,
+    CohesionInfluence, CurrentDirection, DesiredDirection, Human, MovementVelocity,
+    RandomWalkInfluence,
 };
 use crate::resources::EntityAssets;
 use bevy::prelude::*;
@@ -68,6 +69,7 @@ pub fn spawn_human(
             CurrentDirection {
                 direction: Vec2::new(angle.cos(), angle.sin()),
             },
+            DesiredDirection::default(),
         ));
     }
 

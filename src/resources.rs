@@ -1,4 +1,5 @@
 pub mod camera;
+pub mod debug;
 pub mod movement;
 pub mod rendering;
 pub mod spatial;
@@ -6,6 +7,7 @@ pub mod terrain;
 
 // Re-export all public items
 pub use camera::CameraConfig;
+pub use debug::DebugConfig;
 pub use movement::MovementConfig;
 pub use rendering::{EntityAssets, TilemapAssets};
 pub use spatial::SpatialGrid;
