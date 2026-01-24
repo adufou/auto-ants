@@ -63,8 +63,8 @@ pub fn spawn_human(
                 weight: 1.0,
             },
             CohesionInfluence {
-                perception_radius: 150.0,
-                weight: 0.75,
+                perception_radius: 256.0,
+                weight: 1.0,
             },
             CurrentDirection {
                 direction: Vec2::new(angle.cos(), angle.sin()),

@@ -13,8 +13,8 @@ pub struct CohesionInfluence {
 impl Default for CohesionInfluence {
     fn default() -> Self {
         Self {
-            perception_radius: 150.0, // Look for neighbors within 150px
-            weight: 1.0,              // Baseline weight
+            perception_radius: 16.0, // Look for neighbors within 150px
+            weight: 1.0,             // Baseline weight
         }
     }
 }
