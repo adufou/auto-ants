@@ -1,5 +1,6 @@
 use crate::resources::{
-    CameraConfig, ChunkManager, DebugConfig, MovementConfig, SpatialGrid, TerrainConfig,
+    CameraConfig, ChunkManager, DebugConfig, MovementConfig, PhysicsConfig, SpatialGrid,
+    TerrainConfig,
 };
 use crate::systems::camera::{camera_controls, camera_zoom, track_camera_chunk};
 use crate::systems::debug::{performance_monitor, terrain_tuning, vision_debug_gizmos};
@@ -20,6 +21,7 @@ impl Plugin for WorldPlugin {
         app.insert_resource(TerrainConfig::default());
         app.insert_resource(ChunkManager::new(12345));
         app.insert_resource(MovementConfig::default());
+        app.insert_resource(PhysicsConfig::default());
         app.insert_resource(SpatialGrid::new(300.0));
 
         // Startup systems (generate_world must run after setup_tilemap to access TilemapAssets)
