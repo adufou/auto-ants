@@ -21,8 +21,8 @@ pub use setup_entities::setup_entities;
 mod setup_tilemap;
 pub use setup_tilemap::setup_tilemap;
 
-mod spawn_ant;
-pub use spawn_ant::spawn_ant;
+mod spawn_human;
+pub use spawn_human::spawn_human;
 
 mod terrain_tuning;
 pub use terrain_tuning::terrain_tuning;

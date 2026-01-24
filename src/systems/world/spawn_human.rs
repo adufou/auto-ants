@@ -1,18 +1,18 @@
-use crate::components::{Ant, RandomWalkBehavior};
+use crate::components::{Human, RandomWalkBehavior};
 use crate::resources::EntityAssets;
 use bevy::prelude::*;
 
-/// System that spawns a single ant at world origin when assets are ready
-/// Uses Local<bool> to ensure only one ant is spawned
-pub fn spawn_ant(
+/// System that spawns a single human at world origin when assets are ready
+/// Uses Local<bool> to ensure only one human is spawned
+pub fn spawn_human(
     mut commands: Commands,
     entity_assets: Option<Res<EntityAssets>>,
     images: Res<Assets<Image>>,
-    existing_ants: Query<Entity, With<Ant>>,
+    existing_humans: Query<Entity, With<Human>>,
     mut spawned: Local<bool>,
 ) {
     // Only run once
-    if *spawned || !existing_ants.is_empty() {
+    if *spawned || !existing_humans.is_empty() {
         return;
     }
 
@@ -27,7 +27,7 @@ pub fn spawn_ant(
         return;
     }
 
-    // Spawn the ant at world center (0, 0) with z=1 to render above tilemap
+    // Spawn the human at world center (0, 0) with z=1 to render above tilemap
     commands.spawn((
         Sprite::from_atlas_image(
             entity_assets.texture_handle.clone(),
@@ -37,10 +37,10 @@ pub fn spawn_ant(
             },
         ),
         Transform::from_xyz(0.0, 0.0, 1.0),
-        Ant,
+        Human,
         RandomWalkBehavior::default(),
     ));
 
     *spawned = true;
-    info!("Spawned ant at world origin (0, 0)");
+    info!("Spawned human at world origin (0, 0)");
 }

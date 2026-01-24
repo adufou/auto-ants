@@ -1,7 +1,7 @@
 use crate::resources::{ChunkManager, TerrainConfig};
 use crate::systems::world::{
     camera_controls, despawn_chunks, generate_chunks, performance_monitor, random_walk_movement,
-    setup_entities, setup_tilemap, spawn_ant, terrain_tuning, track_camera_chunk,
+    setup_entities, setup_tilemap, spawn_human, terrain_tuning, track_camera_chunk,
 };
 use bevy::prelude::*;
 
@@ -19,7 +19,12 @@ impl Plugin for WorldPlugin {
         // Update systems
         app.add_systems(
             Update,
-            (terrain_tuning, performance_monitor, spawn_ant, random_walk_movement),
+            (
+                terrain_tuning,
+                performance_monitor,
+                spawn_human,
+                random_walk_movement,
+            ),
         ); // Independent systems
 
         // Ordered chain for chunk generation/loading

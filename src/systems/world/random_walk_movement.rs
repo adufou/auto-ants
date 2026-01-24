@@ -1,11 +1,11 @@
-use crate::components::{Ant, RandomWalkBehavior};
+use crate::components::{Human, RandomWalkBehavior};
 use bevy::prelude::*;
 use rand::Rng;
 
 /// System that updates entities with random walk behavior
 /// Implements continuous Brownian motion with smooth direction changes
 pub fn random_walk_movement(
-    mut query: Query<(&mut Transform, &mut RandomWalkBehavior), With<Ant>>,
+    mut query: Query<(&mut Transform, &mut RandomWalkBehavior), With<Human>>,
     time: Res<Time>,
 ) {
     let dt = time.delta_secs();
