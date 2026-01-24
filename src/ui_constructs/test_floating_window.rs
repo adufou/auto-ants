@@ -1,16 +1,10 @@
-use super::capabilities::*;
+use crate::components::ui::floating_window::{TestFloatingWindowRoot, TestWindowCloseButton};
+use crate::config::ui::*;
 use bevy::prelude::*;
-use bevy::ui::widget::Text;
 use bevy_immediate::ui::floating_window_plugin::{FloatingWindow, resizable_borders};
 use bevy_immediate::{Imm, attach::ImmediateAttach};
 
-/// Root component for the test floating window
-#[derive(Component)]
-pub struct TestFloatingWindowRoot;
-
-/// Marker component for the close button
-#[derive(Component)]
-pub struct TestWindowCloseButton;
+use super::CapsUi;
 
 impl ImmediateAttach<CapsUi> for TestFloatingWindowRoot {
     type Params = ();

@@ -3,10 +3,11 @@ use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
 mod components;
+mod config;
 mod plugins;
 mod resources;
 mod systems;
-mod ui;
+mod ui_constructs;
 
 use plugins::{UiPlugin, WorldPlugin};
 

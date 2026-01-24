@@ -1,8 +1,5 @@
 use bevy::prelude::*;
 
-// Re-export CapsUi from bevy_immediate
-pub use bevy_immediate::ui::CapsUi;
-
 // UI styling constants
 pub const CHECKBOX_BG: Color = Color::srgba(0.2, 0.2, 0.2, 0.8);
 pub const CHECKBOX_BORDER: Color = Color::WHITE;

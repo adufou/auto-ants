@@ -1,5 +1,5 @@
-mod setup_ui;
-pub use setup_ui::setup_debug_ui;
+pub mod debug_ui;
+pub use debug_ui::{handle_checkbox_interaction, spawn_debug_ui};
 
-mod checkbox_interaction;
-pub use checkbox_interaction::handle_checkbox_interaction;
+pub mod test_floating_window;
+pub use test_floating_window::{handle_test_window_close, spawn_test_window};

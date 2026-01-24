@@ -2,6 +2,7 @@ pub mod camera;
 pub mod markers;
 pub mod movement;
 pub mod physics;
+pub mod ui;
 
 // Re-export all public items
 pub use camera::ChunkPosition;

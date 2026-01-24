@@ -1,4 +1,4 @@
-use super::test_floating_window::{TestFloatingWindowRoot, TestWindowCloseButton};
+use crate::components::ui::floating_window::{TestFloatingWindowRoot, TestWindowCloseButton};
 use bevy::prelude::*;
 
 /// Spawns the test floating window on startup

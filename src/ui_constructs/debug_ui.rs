@@ -1,17 +1,10 @@
-use super::capabilities::*;
+use crate::components::ui::debug_ui::{CheckboxState, DebugUiRoot};
+use crate::config::ui::*;
 use bevy::prelude::*;
 use bevy::ui::widget::Text;
 use bevy_immediate::{Imm, attach::ImmediateAttach};
 
-/// Root component for the debug UI in the bottom-right corner
-#[derive(Component)]
-pub struct DebugUiRoot;
-
-/// Checkbox state component
-#[derive(Component, Default)]
-pub struct CheckboxState {
-    pub checked: bool,
-}
+use super::CapsUi;
 
 impl ImmediateAttach<CapsUi> for DebugUiRoot {
     type Params = ();

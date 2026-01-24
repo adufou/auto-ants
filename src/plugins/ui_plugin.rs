@@ -1,8 +1,8 @@
-use crate::ui::capabilities::UI_PADDING;
-use crate::ui::{
-    CapsUi, DebugUiRoot, TestFloatingWindowRoot, handle_checkbox_interaction,
-    handle_test_window_close, spawn_test_window,
+use crate::components::ui::{DebugUiRoot, TestFloatingWindowRoot};
+use crate::systems::ui::{
+    handle_checkbox_interaction, handle_test_window_close, spawn_debug_ui, spawn_test_window,
 };
+use crate::ui_constructs::CapsUi;
 use bevy::prelude::*;
 use bevy_immediate::attach::BevyImmediateAttachPlugin;
 use bevy_immediate::ui::{
@@ -28,19 +28,4 @@ impl Plugin for UiPlugin {
                 (handle_checkbox_interaction, handle_test_window_close),
             );
     }
-}
-
-/// Spawns the debug UI in the bottom-right corner
-fn spawn_debug_ui(mut commands: Commands) {
-    commands.spawn((
-        Node {
-            width: Val::Percent(100.0),
-            height: Val::Percent(100.0),
-            justify_content: JustifyContent::FlexEnd,
-            align_items: AlignItems::FlexEnd,
-            padding: UiRect::all(Val::Px(UI_PADDING)),
-            ..default()
-        },
-        DebugUiRoot,
-    ));
 }

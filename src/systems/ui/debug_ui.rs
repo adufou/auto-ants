@@ -1,6 +1,22 @@
-use super::debug_ui::CheckboxState;
+use crate::components::ui::debug_ui::{CheckboxState, DebugUiRoot};
+use crate::config::ui::UI_PADDING;
 use crate::resources::DebugConfig;
 use bevy::prelude::*;
+
+/// Spawns the debug UI in the bottom-right corner
+pub fn spawn_debug_ui(mut commands: Commands) {
+    commands.spawn((
+        Node {
+            width: Val::Percent(100.0),
+            height: Val::Percent(100.0),
+            justify_content: JustifyContent::FlexEnd,
+            align_items: AlignItems::FlexEnd,
+            padding: UiRect::all(Val::Px(UI_PADDING)),
+            ..default()
+        },
+        DebugUiRoot,
+    ));
+}
 
 /// System to handle checkbox clicks
 pub fn handle_checkbox_interaction(
