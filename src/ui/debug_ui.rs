@@ -52,8 +52,16 @@ impl ImmediateAttach<CapsUi> for DebugUiRoot {
                     });
 
                 // Label text
-                ui.ch()
-                    .on_spawn_insert(|| (TextColor(TEXT_COLOR), Text("Debug".into())));
+                ui.ch().on_spawn_insert(|| {
+                    (
+                        TextColor(TEXT_COLOR),
+                        Text("Debug".into()),
+                        TextFont {
+                            font_size: FONT_SIZE_NORMAL,
+                            ..default()
+                        },
+                    )
+                });
             });
     }
 }
