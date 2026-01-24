@@ -1,5 +1,10 @@
 use bevy::prelude::*;
 
+/// World size configuration (16x16 chunk world)
+pub const WORLD_SIZE_CHUNKS: i32 = 16; // 16x16 chunk world
+pub const WORLD_MIN_CHUNK: i32 = -8;   // Minimum chunk coordinate
+pub const WORLD_MAX_CHUNK: i32 = 7;    // Maximum chunk coordinate
+
 /// Configuration for procedural terrain generation
 #[derive(Resource, Debug, Clone)]
 pub struct TerrainConfig {
@@ -17,9 +22,6 @@ pub struct TerrainConfig {
 
     /// Chunk size in tiles (16x16 per spec)
     pub chunk_size: u32,
-
-    /// Chunk view distance (8 chunks = 16x16 total grid)
-    pub chunk_view_distance: i32,
 }
 
 impl Default for TerrainConfig {
@@ -29,7 +31,6 @@ impl Default for TerrainConfig {
             noise_seed: 12345,
             noise_frequency: 0.05,
             chunk_size: 16,
-            chunk_view_distance: 8,
         }
     }
 }

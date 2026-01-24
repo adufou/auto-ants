@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use noise::{NoiseFn, Perlin};
 use std::collections::{HashMap, HashSet};
 
+use crate::resources::terrain_config::{WORLD_MAX_CHUNK, WORLD_MIN_CHUNK};
+
 /// Chunk coordinate in world space
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ChunkCoord {
@@ -38,22 +40,21 @@ impl ChunkManager {
         }
     }
 
-    /// Calculate which chunks should be visible based on camera position
-    pub fn calculate_visible_chunks(
-        &self,
-        camera_chunk_x: i32,
-        camera_chunk_y: i32,
-        view_distance: i32,
-    ) -> HashSet<ChunkCoord> {
-        let mut visible = HashSet::new();
-
-        for dx in -view_distance..=view_distance {
-            for dy in -view_distance..=view_distance {
-                visible.insert(ChunkCoord::new(camera_chunk_x + dx, camera_chunk_y + dy));
+    /// Get all chunk coordinates for the fixed 16x16 world
+    pub fn get_all_chunk_coords(&self) -> Vec<ChunkCoord> {
+        let mut coords = Vec::with_capacity(256);
+        for x in WORLD_MIN_CHUNK..=WORLD_MAX_CHUNK {
+            for y in WORLD_MIN_CHUNK..=WORLD_MAX_CHUNK {
+                coords.push(ChunkCoord::new(x, y));
             }
         }
+        coords
+    }
 
-        visible
+    /// Check if chunk coordinates are within world bounds
+    pub fn is_within_world_bounds(x: i32, y: i32) -> bool {
+        x >= WORLD_MIN_CHUNK && x <= WORLD_MAX_CHUNK &&
+        y >= WORLD_MIN_CHUNK && y <= WORLD_MAX_CHUNK
     }
 
     /// Get noise value for world tile position

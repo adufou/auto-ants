@@ -1,11 +1,8 @@
 mod camera_controls;
 pub use camera_controls::camera_controls;
 
-mod despawn_chunks;
-pub use despawn_chunks::despawn_chunks;
-
 mod generate_chunks;
-pub use generate_chunks::generate_chunks;
+pub use generate_chunks::generate_world;
 
 mod helpers;
 

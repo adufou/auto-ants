@@ -1,6 +1,6 @@
 use crate::resources::{ChunkManager, TerrainConfig};
 use crate::systems::world::{
-    camera_controls, despawn_chunks, generate_chunks, performance_monitor, random_walk_movement,
+    camera_controls, generate_world, performance_monitor, random_walk_movement,
     setup_entities, setup_tilemap, spawn_human, terrain_tuning, track_camera_chunk,
 };
 use bevy::prelude::*;
@@ -13,8 +13,9 @@ impl Plugin for WorldPlugin {
         app.insert_resource(TerrainConfig::default());
         app.insert_resource(ChunkManager::new(12345));
 
-        // Startup systems
-        app.add_systems(Startup, (setup_tilemap, setup_entities));
+        // Startup systems (generate_world must run after setup_tilemap to access TilemapAssets)
+        app.add_systems(Startup, (setup_tilemap, setup_entities).chain());
+        app.add_systems(Startup, generate_world.after(setup_tilemap));
 
         // Update systems
         app.add_systems(
@@ -27,14 +28,12 @@ impl Plugin for WorldPlugin {
             ),
         ); // Independent systems
 
-        // Ordered chain for chunk generation/loading
+        // Camera controls chain
         app.add_systems(
             Update,
             (
-                camera_controls,    // 0. Move camera with WASD
-                track_camera_chunk, // 1. Update camera's chunk position
-                generate_chunks,    // 2. Spawn new chunks in view
-                despawn_chunks,     // 3. Remove chunks out of view
+                camera_controls,    // Move camera with WASD
+                track_camera_chunk, // Update camera's chunk position
             )
                 .chain(),
         );

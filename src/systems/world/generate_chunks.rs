@@ -1,32 +1,30 @@
-use crate::components::{ChunkPosition, GrassTile, WaterTile};
+use crate::components::{GrassTile, WaterTile};
 use crate::resources::{ChunkCoord, ChunkManager, TerrainConfig, TilemapAssets};
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
-use super::helpers::get_camera_chunk;
 
-pub fn generate_chunks(
+/// Generate the entire 16x16 chunk world at startup
+pub fn generate_world(
     mut commands: Commands,
-    camera_query: Query<&ChunkPosition, With<Camera2d>>,
     mut chunk_manager: ResMut<ChunkManager>,
     config: Res<TerrainConfig>,
     tilemap_assets: Res<TilemapAssets>,
+    mut generated: Local<bool>,
 ) {
-    let camera_chunk = match get_camera_chunk(&camera_query) {
-        Some(chunk) => chunk,
-        None => return,
-    };
+    // Only run once
+    if *generated {
+        return;
+    }
 
-    // Calculate which chunks should be visible
-    let visible_chunks = chunk_manager.calculate_visible_chunks(
-        camera_chunk.x,
-        camera_chunk.y,
-        config.chunk_view_distance,
-    );
+    info!("Starting world generation: 256 chunks...");
 
-    // Generate chunks that aren't loaded yet
-    for chunk_coord in visible_chunks {
+    // Get all chunk coordinates for the 16x16 world
+    let all_chunks = chunk_manager.get_all_chunk_coords();
+
+    // Generate all chunks
+    for chunk_coord in all_chunks {
         if chunk_manager.loaded_chunks.contains(&chunk_coord) {
-            continue; // Already loaded
+            continue; // Already loaded (shouldn't happen on first run)
         }
 
         // Spawn new chunk
@@ -42,9 +40,10 @@ pub fn generate_chunks(
         chunk_manager
             .chunk_entities
             .insert(chunk_coord, chunk_entity);
-
-        info!("Generated chunk ({}, {})", chunk_coord.x, chunk_coord.y);
     }
+
+    *generated = true;
+    info!("World generation complete: 256 chunks loaded");
 }
 
 fn spawn_chunk(

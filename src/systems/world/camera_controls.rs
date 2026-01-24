@@ -1,10 +1,12 @@
 use bevy::prelude::*;
+use crate::resources::TerrainConfig;
 
-/// Simple camera movement system for testing chunk loading
+/// Camera movement system with world bounds
 pub fn camera_controls(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut camera_query: Query<&mut Transform, With<Camera2d>>,
     time: Res<Time>,
+    config: Res<TerrainConfig>,
 ) {
     const SPEED: f32 = 200.0; // pixels per second
     const MOVEMENT_KEYS: &[(KeyCode, f32, f32)] = &[
@@ -13,6 +15,9 @@ pub fn camera_controls(
         (KeyCode::KeyA, -1.0, 0.0),  // Left
         (KeyCode::KeyD, 1.0, 0.0),   // Right
     ];
+
+    // Calculate world bounds: 8 chunks * 16 tiles * 16 pixels = 2048
+    let half_world_pixels = (8 * config.chunk_size * 16) as f32;
 
     for mut transform in &mut camera_query {
         let mut velocity = Vec3::ZERO;
@@ -27,5 +32,9 @@ pub fn camera_controls(
         if velocity != Vec3::ZERO {
             transform.translation += velocity.normalize() * SPEED * time.delta_secs();
         }
+
+        // Clamp camera position to world bounds
+        transform.translation.x = transform.translation.x.clamp(-half_world_pixels, half_world_pixels);
+        transform.translation.y = transform.translation.y.clamp(-half_world_pixels, half_world_pixels);
     }
 }
