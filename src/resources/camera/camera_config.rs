@@ -14,6 +14,10 @@ pub struct CameraConfig {
 
     /// Camera movement speed in pixels per second
     pub movement_speed: f32,
+
+    /// Camera follow smoothing factor (higher = faster following, range 0.0-1.0)
+    /// Recommended: 0.15 for smooth, responsive following
+    pub follow_smoothing: f32,
 }
 
 impl Default for CameraConfig {
@@ -23,6 +27,7 @@ impl Default for CameraConfig {
             min_scale: 0.25,
             max_scale: 4.0,
             movement_speed: 200.0,
+            follow_smoothing: 0.15,
         }
     }
 }

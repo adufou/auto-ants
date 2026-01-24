@@ -2,7 +2,9 @@ use crate::resources::{
     CameraConfig, ChunkManager, DebugConfig, MovementConfig, PhysicsConfig, SpatialGrid,
     TerrainConfig,
 };
-use crate::systems::camera::{camera_controls, camera_zoom, track_camera_chunk};
+use crate::systems::camera::{
+    camera_controls, camera_follow_human, camera_zoom, track_camera_chunk,
+};
 use crate::systems::debug::{performance_monitor, terrain_tuning, vision_debug_gizmos};
 use crate::systems::world::{
     apply_movement, calculate_random_walk, generate_world, resolve_movement, setup_entities,
@@ -55,9 +57,10 @@ impl Plugin for WorldPlugin {
         app.add_systems(
             Update,
             (
-                camera_controls,    // Move camera with WASD
-                camera_zoom,        // Zoom camera with mouse wheel
-                track_camera_chunk, // Update camera's chunk position
+                camera_follow_human, // Follow selected human (runs first)
+                camera_controls,     // Move camera with WASD (disabled during follow)
+                camera_zoom,         // Zoom camera with mouse wheel
+                track_camera_chunk,  // Update camera's chunk position
             )
                 .chain(),
         );

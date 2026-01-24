@@ -1,4 +1,4 @@
-use crate::resources::{CameraConfig, TerrainConfig};
+use crate::resources::{CameraConfig, SelectedHuman, TerrainConfig};
 use bevy::prelude::*;
 
 /// Camera movement system with world bounds
@@ -8,6 +8,7 @@ pub fn camera_controls(
     time: Res<Time>,
     camera_config: Res<CameraConfig>,
     terrain_config: Res<TerrainConfig>,
+    mut selected_human: ResMut<SelectedHuman>,
 ) {
     const MOVEMENT_KEYS: &[(KeyCode, f32, f32)] = &[
         (KeyCode::KeyW, 0.0, 1.0),  // Up
@@ -15,6 +16,22 @@ pub fn camera_controls(
         (KeyCode::KeyA, -1.0, 0.0), // Left
         (KeyCode::KeyD, 1.0, 0.0),  // Right
     ];
+
+    // If a human is selected, check for manual override
+    if selected_human.0.is_some() {
+        // Check if any movement key is pressed
+        let any_movement_key = MOVEMENT_KEYS
+            .iter()
+            .any(|(key, _, _)| keyboard.pressed(*key));
+
+        if any_movement_key {
+            // User wants manual control - deselect human
+            selected_human.0 = None;
+        } else {
+            // Follow mode active - don't process manual controls
+            return;
+        }
+    }
 
     // Calculate world bounds: 8 chunks * 16 tiles * 16 pixels = 2048
     let half_world_pixels = (8 * terrain_config.chunk_size * 16) as f32;
