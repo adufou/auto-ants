@@ -10,9 +10,6 @@ pub use generate_chunks::generate_world;
 mod performance_monitor;
 pub use performance_monitor::performance_monitor;
 
-mod random_walk_movement;
-pub use random_walk_movement::random_walk_movement;
-
 mod setup_entities;
 pub use setup_entities::setup_entities;
 
@@ -27,3 +24,15 @@ pub use terrain_tuning::terrain_tuning;
 
 mod track_camera_chunk;
 pub use track_camera_chunk::track_camera_chunk;
+
+mod update_spatial_grid;
+pub use update_spatial_grid::update_spatial_grid;
+
+mod calculate_random_walk;
+pub use calculate_random_walk::calculate_random_walk;
+
+mod resolve_movement;
+pub use resolve_movement::resolve_movement;
+
+mod apply_movement;
+pub use apply_movement::apply_movement;

@@ -1,7 +1,8 @@
-use crate::components::{Human, RandomWalkBehavior};
+use crate::components::{CohesionInfluence, Human, MovementVelocity, RandomWalkInfluence};
 use crate::resources::EntityAssets;
 use bevy::prelude::*;
 use rand::random;
+use std::f32::consts::PI;
 
 /// Number of humans to spawn at game start
 const NUM_HUMANS: usize = 32;
@@ -52,7 +53,16 @@ pub fn spawn_human(
             ),
             Transform::from_xyz(x, y, 1.0),
             Human,
-            RandomWalkBehavior::default(),
+            MovementVelocity::default(),
+            RandomWalkInfluence {
+                direction: Vec2::new(angle.cos(), angle.sin()),
+                direction_change_rate: 2.0 * PI,
+                weight: 1.0,
+            },
+            CohesionInfluence {
+                perception_radius: 150.0,
+                weight: 0.75,
+            },
         ));
     }
 

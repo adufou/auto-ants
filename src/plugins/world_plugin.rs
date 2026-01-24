@@ -1,7 +1,8 @@
-use crate::resources::{CameraConfig, ChunkManager, TerrainConfig};
+use crate::resources::{CameraConfig, ChunkManager, MovementConfig, SpatialGrid, TerrainConfig};
 use crate::systems::world::{
-    camera_controls, camera_zoom, generate_world, performance_monitor, random_walk_movement,
-    setup_entities, setup_tilemap, spawn_human, terrain_tuning, track_camera_chunk,
+    apply_movement, calculate_random_walk, camera_controls, camera_zoom, generate_world,
+    performance_monitor, resolve_movement, setup_entities, setup_tilemap, spawn_human,
+    terrain_tuning, track_camera_chunk, update_spatial_grid,
 };
 use bevy::prelude::*;
 
@@ -13,6 +14,8 @@ impl Plugin for WorldPlugin {
         app.insert_resource(CameraConfig::default());
         app.insert_resource(TerrainConfig::default());
         app.insert_resource(ChunkManager::new(12345));
+        app.insert_resource(MovementConfig::default());
+        app.insert_resource(SpatialGrid::new(300.0));
 
         // Startup systems (generate_world must run after setup_tilemap to access TilemapAssets)
         app.add_systems(Startup, (setup_tilemap, setup_entities).chain());
@@ -25,7 +28,13 @@ impl Plugin for WorldPlugin {
                 terrain_tuning,
                 performance_monitor,
                 spawn_human,
-                random_walk_movement,
+                // New movement pipeline (replaces random_walk_movement)
+                (
+                    update_spatial_grid,
+                    calculate_random_walk,
+                    (resolve_movement, apply_movement).chain(),
+                )
+                    .chain(),
             ),
         ); // Independent systems
 

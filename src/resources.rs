@@ -12,3 +12,9 @@ pub use tilemap_assets::TilemapAssets;
 
 mod entity_assets;
 pub use entity_assets::EntityAssets;
+
+mod spatial_grid;
+pub use spatial_grid::SpatialGrid;
+
+mod movement_config;
+pub use movement_config::MovementConfig;
