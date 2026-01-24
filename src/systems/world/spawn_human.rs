@@ -1,4 +1,6 @@
-use crate::components::{CohesionInfluence, Human, MovementVelocity, RandomWalkInfluence};
+use crate::components::{
+    CohesionInfluence, CurrentDirection, Human, MovementVelocity, RandomWalkInfluence,
+};
 use crate::resources::EntityAssets;
 use bevy::prelude::*;
 use rand::random;
@@ -62,6 +64,9 @@ pub fn spawn_human(
             CohesionInfluence {
                 perception_radius: 150.0,
                 weight: 0.75,
+            },
+            CurrentDirection {
+                direction: Vec2::new(angle.cos(), angle.sin()),
             },
         ));
     }

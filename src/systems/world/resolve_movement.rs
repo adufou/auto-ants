@@ -1,15 +1,20 @@
-use crate::components::{CohesionInfluence, Human, MovementVelocity, RandomWalkInfluence};
+use crate::components::{
+    CohesionInfluence, CurrentDirection, Human, MovementVelocity, RandomWalkInfluence,
+};
 use crate::resources::{MovementConfig, SpatialGrid};
 use bevy::prelude::*;
+use std::f32::consts::PI;
 
 /// System that combines all movement influences into a final velocity
 /// Uses percentage-based weight normalization
+/// Gradually rotates current direction toward desired direction with max rotation rate
 pub fn resolve_movement(
     mut query: Query<
         (
             Entity,
             &Transform,
             &mut MovementVelocity,
+            &mut CurrentDirection,
             &RandomWalkInfluence,
             Option<&CohesionInfluence>,
         ),
@@ -18,9 +23,14 @@ pub fn resolve_movement(
     spatial_grid: Res<SpatialGrid>,
     positions: Query<&Transform, With<Human>>,
     movement_config: Res<MovementConfig>,
+    time: Res<Time>,
 ) {
-    for (entity, transform, mut velocity, random_walk, cohesion_opt) in &mut query {
-        // Collect weighted directions
+    let dt = time.delta_secs();
+
+    for (entity, transform, mut velocity, mut current_dir, random_walk, cohesion_opt) in
+        &mut query
+    {
+        // Step 1: Calculate DESIRED direction from all influences
         let mut combined_direction = Vec2::ZERO;
         let mut total_weight = 0.0;
 
@@ -41,13 +51,36 @@ pub fn resolve_movement(
             total_weight += cohesion.weight;
         }
 
-        // Normalize by total weight and apply base speed
-        if total_weight > 0.0 {
-            velocity.velocity = (combined_direction / total_weight).normalize_or_zero()
-                * movement_config.base_speed;
+        let desired_direction = if total_weight > 0.0 {
+            (combined_direction / total_weight).normalize_or_zero()
         } else {
-            velocity.velocity = Vec2::ZERO;
+            Vec2::ZERO
+        };
+
+        // Step 2: Rotate current direction toward desired direction with max rate
+        if desired_direction.length_squared() > 0.001 {
+            let current_angle = current_dir.direction.y.atan2(current_dir.direction.x);
+            let desired_angle = desired_direction.y.atan2(desired_direction.x);
+
+            // Calculate shortest angle difference (-PI to PI)
+            let mut angle_diff = desired_angle - current_angle;
+            while angle_diff > PI {
+                angle_diff -= 2.0 * PI;
+            }
+            while angle_diff < -PI {
+                angle_diff += 2.0 * PI;
+            }
+
+            // Clamp rotation to max rate
+            let max_rotation_this_frame = movement_config.max_rotation_rate * dt;
+            let rotation = angle_diff.clamp(-max_rotation_this_frame, max_rotation_this_frame);
+
+            let new_angle = current_angle + rotation;
+            current_dir.direction = Vec2::new(new_angle.cos(), new_angle.sin());
         }
+
+        // Step 3: Set velocity using CURRENT direction (not desired)
+        velocity.velocity = current_dir.direction * movement_config.base_speed;
     }
 }
 
