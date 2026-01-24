@@ -1,0 +1,3 @@
+- system de relations entre les humains
+- pause du jeu
+- hover sur les humains : afficher les relations (liens entre les humains, rouge = enemi, vert = ami, blanc = neutre)
