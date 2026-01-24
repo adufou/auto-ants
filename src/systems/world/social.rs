@@ -1,2 +1,6 @@
+pub mod relationship_utils;
+mod share_relationship_opinions;
 mod update_close_humans_relationships;
+
+pub use share_relationship_opinions::share_relationship_opinions;
 pub use update_close_humans_relationships::update_close_humans_relationships;

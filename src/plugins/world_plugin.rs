@@ -8,7 +8,8 @@ use crate::systems::camera::{
 use crate::systems::debug::{performance_monitor, terrain_tuning, vision_debug_gizmos};
 use crate::systems::world::{
     apply_movement, calculate_random_walk, generate_world, resolve_movement, setup_entities,
-    setup_tilemap, spawn_human, update_close_humans_relationships, update_spatial_grid,
+    setup_tilemap, share_relationship_opinions, spawn_human, update_close_humans_relationships,
+    update_spatial_grid,
 };
 use avian2d::prelude::*;
 use bevy::prelude::*;
@@ -47,6 +48,7 @@ impl Plugin for WorldPlugin {
             (
                 update_spatial_grid,
                 update_close_humans_relationships, // Update relationships after spatial grid
+                share_relationship_opinions,       // Share opinions about others (gossip)
                 calculate_random_walk,
                 (resolve_movement, apply_movement).chain(),
             )

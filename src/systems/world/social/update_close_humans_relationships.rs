@@ -1,5 +1,6 @@
 use crate::components::{Human, HumanRelationships};
 use crate::resources::SpatialGrid;
+use crate::systems::world::social::relationship_utils::apply_tanh_modifier;
 use bevy::prelude::*;
 use rand::Rng;
 
@@ -65,40 +66,5 @@ pub fn update_close_humans_relationships(
         if let Ok((_, _, mut relationships)) = humans.get_mut(entity) {
             relationships.update_relationship(neighbor_entity, new_relationship);
         }
-    }
-}
-
-/// Apply tanh(2x) curve modifier to relationship change
-///
-/// The tanh(2x) curve creates smooth S-shaped amplification:
-/// - At relationship = 0.0: modifier = 0% (exact zero, neutral)
-/// - At relationship = ±0.5: modifier = ±76% (moderate amplification)
-/// - At relationship = ±0.75: modifier = ±91% (strong amplification)
-/// - At relationship = ±0.9: modifier = ±97% (near-maximum amplification)
-///
-/// For positive relationships:
-/// - Gains are amplified
-/// - Losses are reduced
-///
-/// For negative relationships:
-/// - Losses are amplified
-/// - Gains are reduced
-///
-/// The gentle slope (2x scaling) allows for stable neutral zone and nuanced relationships
-fn apply_tanh_modifier(current_relationship: f32, base_change: f32) -> f32 {
-    // Calculate modifier using tanh(2x) smooth S-curve
-    let modifier = (2.0 * current_relationship).tanh();
-
-    // Apply modifier based on whether change is positive or negative
-    if base_change > 0.0 {
-        // Positive change (gain):
-        // - If relationship is positive: amplify gain
-        // - If relationship is negative: reduce gain
-        base_change * (1.0 + modifier)
-    } else {
-        // Negative change (loss):
-        // - If relationship is positive: reduce loss
-        // - If relationship is negative: amplify loss
-        base_change * (1.0 - modifier)
     }
 }
