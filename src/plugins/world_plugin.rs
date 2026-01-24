@@ -1,10 +1,11 @@
 use crate::resources::{
     CameraConfig, ChunkManager, DebugConfig, MovementConfig, SpatialGrid, TerrainConfig,
 };
+use crate::systems::camera::{camera_controls, camera_zoom, track_camera_chunk};
+use crate::systems::debug::{performance_monitor, terrain_tuning, vision_debug_gizmos};
 use crate::systems::world::{
-    apply_movement, calculate_random_walk, camera_controls, camera_zoom, generate_world,
-    performance_monitor, resolve_movement, setup_entities, setup_tilemap, spawn_human,
-    terrain_tuning, track_camera_chunk, update_spatial_grid, vision_debug_gizmos,
+    apply_movement, calculate_random_walk, generate_world, resolve_movement, setup_entities,
+    setup_tilemap, spawn_human, update_spatial_grid,
 };
 use bevy::prelude::*;
 
