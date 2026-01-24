@@ -51,12 +51,6 @@ impl ChunkManager {
         coords
     }
 
-    /// Check if chunk coordinates are within world bounds
-    pub fn is_within_world_bounds(x: i32, y: i32) -> bool {
-        x >= WORLD_MIN_CHUNK && x <= WORLD_MAX_CHUNK &&
-        y >= WORLD_MIN_CHUNK && y <= WORLD_MAX_CHUNK
-    }
-
     /// Get noise value for world tile position
     pub fn get_noise_at(&self, world_x: f64, world_y: f64, frequency: f64) -> f64 {
         self.noise_generator

@@ -7,8 +7,6 @@ pub use camera_zoom::camera_zoom;
 mod generate_chunks;
 pub use generate_chunks::generate_world;
 
-mod helpers;
-
 mod performance_monitor;
 pub use performance_monitor::performance_monitor;
 

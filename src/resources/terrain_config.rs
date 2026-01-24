@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 
 /// World size configuration (16x16 chunk world)
-pub const WORLD_SIZE_CHUNKS: i32 = 16; // 16x16 chunk world
 pub const WORLD_MIN_CHUNK: i32 = -8;   // Minimum chunk coordinate
 pub const WORLD_MAX_CHUNK: i32 = 7;    // Maximum chunk coordinate
 
@@ -12,9 +11,6 @@ pub struct TerrainConfig {
     /// Range: -1.0 to 1.0 (Perlin noise output range)
     /// Default 0.0 = ~50% water, 0.2 = ~40% water, -0.2 = ~60% water
     pub water_threshold: f32,
-
-    /// Seed for noise generator (reproducible worlds)
-    pub noise_seed: u32,
 
     /// Noise frequency/scale (higher = more varied terrain)
     /// Start with 0.05 for gentle rolling terrain
@@ -28,7 +24,6 @@ impl Default for TerrainConfig {
     fn default() -> Self {
         Self {
             water_threshold: 0.0,
-            noise_seed: 12345,
             noise_frequency: 0.05,
             chunk_size: 16,
         }
