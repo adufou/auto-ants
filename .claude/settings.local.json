@@ -4,6 +4,7 @@
       "Bash(cargo build:*)",
       "Bash(cargo check:*)",
       "Bash(cargo info:*)",
+      "Bash(cargo tree:*)",
       "Bash(dir:*)",
       "Bash(find:*)",
       "Bash(grep:*)",

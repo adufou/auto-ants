@@ -5,6 +5,7 @@ pub mod physics;
 pub mod rendering;
 pub mod spatial;
 pub mod terrain;
+pub mod ui;
 
 // Re-export all public items
 pub use camera::CameraConfig;
@@ -14,3 +15,4 @@ pub use physics::PhysicsConfig;
 pub use rendering::{EntityAssets, TilemapAssets};
 pub use spatial::SpatialGrid;
 pub use terrain::{ChunkCoord, ChunkManager, TerrainConfig};
+pub use ui::SelectedHuman;
