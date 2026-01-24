@@ -12,3 +12,10 @@ pub const CHECKBOX_BORDER_WIDTH: f32 = 2.0;
 pub const UI_PADDING: f32 = 16.0;
 pub const CHECKBOX_LABEL_GAP: f32 = 8.0;
 pub const FONT_SIZE_NORMAL: f32 = 16.0;
+
+// Floating window styling constants
+pub const WINDOW_TITLE_BAR_HEIGHT: f32 = 30.0;
+pub const WINDOW_TITLE_TEXT_SIZE: f32 = 14.0;
+pub const WINDOW_BG_COLOR: Color = Color::srgba(0.15, 0.15, 0.15, 0.95);
+pub const WINDOW_BORDER_COLOR: Color = Color::srgba(0.4, 0.4, 0.4, 1.0);
+pub const CLOSE_BUTTON_SIZE: f32 = 24.0;
