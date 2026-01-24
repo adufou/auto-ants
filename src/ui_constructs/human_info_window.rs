@@ -1,6 +1,6 @@
 use crate::components::ui::floating_window::{
     HumanInfoCloseButton, HumanInfoEntityId, HumanInfoInfluences, HumanInfoNeighbors,
-    HumanInfoPosition, HumanInfoVelocity, HumanInfoWindowRoot,
+    HumanInfoPosition, HumanInfoRelationships, HumanInfoVelocity, HumanInfoWindowRoot,
 };
 use crate::config::ui::*;
 use bevy::prelude::*;
@@ -173,6 +173,19 @@ impl ImmediateAttach<CapsUi> for HumanInfoWindowRoot {
                                             ..default()
                                         },
                                         HumanInfoInfluences,
+                                    )
+                                });
+
+                                // Relationships section
+                                ui.ch().on_spawn_insert(|| {
+                                    (
+                                        TextColor(TEXT_COLOR),
+                                        Text("Relationships: None".into()),
+                                        TextFont {
+                                            font_size: FONT_SIZE_NORMAL,
+                                            ..default()
+                                        },
+                                        HumanInfoRelationships,
                                     )
                                 });
                             });

@@ -27,3 +27,7 @@ pub struct HumanInfoNeighbors;
 /// Marker component for influences text
 #[derive(Component)]
 pub struct HumanInfoInfluences;
+
+/// Marker component for relationships text
+#[derive(Component)]
+pub struct HumanInfoRelationships;

@@ -1,8 +1,9 @@
 use crate::components::markers::Human;
 use crate::components::movement::{CohesionInfluence, RandomWalkInfluence};
+use crate::components::social::HumanRelationships;
 use crate::components::ui::floating_window::{
     HumanInfoCloseButton, HumanInfoEntityId, HumanInfoInfluences, HumanInfoNeighbors,
-    HumanInfoPosition, HumanInfoVelocity, HumanInfoWindowRoot,
+    HumanInfoPosition, HumanInfoRelationships, HumanInfoVelocity, HumanInfoWindowRoot,
 };
 use crate::resources::{SelectedHuman, SpatialGrid};
 use avian2d::prelude::LinearVelocity;
@@ -65,6 +66,7 @@ pub fn update_human_info_content(
             &LinearVelocity,
             &RandomWalkInfluence,
             &CohesionInfluence,
+            &HumanRelationships,
         ),
         With<Human>,
     >,
@@ -76,6 +78,7 @@ pub fn update_human_info_content(
             Without<HumanInfoVelocity>,
             Without<HumanInfoNeighbors>,
             Without<HumanInfoInfluences>,
+            Without<HumanInfoRelationships>,
         ),
     >,
     mut position_query: Query<
@@ -86,6 +89,7 @@ pub fn update_human_info_content(
             Without<HumanInfoVelocity>,
             Without<HumanInfoNeighbors>,
             Without<HumanInfoInfluences>,
+            Without<HumanInfoRelationships>,
         ),
     >,
     mut velocity_query: Query<
@@ -96,6 +100,7 @@ pub fn update_human_info_content(
             Without<HumanInfoPosition>,
             Without<HumanInfoNeighbors>,
             Without<HumanInfoInfluences>,
+            Without<HumanInfoRelationships>,
         ),
     >,
     mut neighbors_query: Query<
@@ -106,6 +111,7 @@ pub fn update_human_info_content(
             Without<HumanInfoPosition>,
             Without<HumanInfoVelocity>,
             Without<HumanInfoInfluences>,
+            Without<HumanInfoRelationships>,
         ),
     >,
     mut influences_query: Query<
@@ -116,6 +122,18 @@ pub fn update_human_info_content(
             Without<HumanInfoPosition>,
             Without<HumanInfoVelocity>,
             Without<HumanInfoNeighbors>,
+            Without<HumanInfoRelationships>,
+        ),
+    >,
+    mut relationships_query: Query<
+        &mut Text,
+        (
+            With<HumanInfoRelationships>,
+            Without<HumanInfoEntityId>,
+            Without<HumanInfoPosition>,
+            Without<HumanInfoVelocity>,
+            Without<HumanInfoNeighbors>,
+            Without<HumanInfoInfluences>,
         ),
     >,
 ) {
@@ -125,7 +143,8 @@ pub fn update_human_info_content(
     };
 
     // Get the selected human's data
-    let Ok((transform, linear_velocity, random_walk, cohesion)) = humans_query.get(selected_entity)
+    let Ok((transform, linear_velocity, random_walk, cohesion, relationships)) =
+        humans_query.get(selected_entity)
     else {
         return;
     };
@@ -170,5 +189,56 @@ pub fn update_human_info_content(
             "Influences:\n  Random Walk: weight {:.2}\n  Cohesion: radius {:.0}px, weight {:.2}",
             random_walk.weight, cohesion.perception_radius, cohesion.weight
         );
+    }
+
+    // Update relationships text
+    if let Ok(mut text) = relationships_query.single_mut() {
+        if relationships.relationship_count() == 0 {
+            **text = "Relationships: None yet".to_string();
+        } else {
+            // Sort relationships by score (highest to lowest)
+            let mut relationship_list: Vec<(Entity, f32)> = relationships
+                .relationships
+                .iter()
+                .map(|(e, score)| (*e, *score))
+                .collect();
+            relationship_list
+                .sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+
+            let total_count = relationship_list.len();
+
+            // Format top 5 relationships (best)
+            let top_relationships: Vec<String> = relationship_list
+                .iter()
+                .take(5)
+                .map(|(entity, score)| {
+                    let sign = if *score >= 0.0 { "+" } else { "" };
+                    format!("  {:?}: {}{:.2}", entity, sign, score)
+                })
+                .collect();
+
+            // Format bottom 5 relationships (worst)
+            let bottom_relationships: Vec<String> = relationship_list
+                .iter()
+                .rev()
+                .take(5)
+                .map(|(entity, score)| {
+                    let sign = if *score >= 0.0 { "+" } else { "" };
+                    format!("  {:?}: {}{:.2}", entity, sign, score)
+                })
+                .collect();
+
+            // Build the display text
+            let mut display_text = format!("Relationships ({}):\n", total_count);
+            display_text.push_str("Top 5:\n");
+            display_text.push_str(&top_relationships.join("\n"));
+
+            if total_count > 5 {
+                display_text.push_str("\n\nBottom 5:\n");
+                display_text.push_str(&bottom_relationships.join("\n"));
+            }
+
+            **text = display_text;
+        }
     }
 }
