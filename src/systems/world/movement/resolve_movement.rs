@@ -27,8 +27,7 @@ pub fn resolve_movement(
 ) {
     let dt = time.delta_secs();
 
-    for (entity, transform, mut velocity, mut current_dir, random_walk, cohesion_opt) in
-        &mut query
+    for (entity, transform, mut velocity, mut current_dir, random_walk, cohesion_opt) in &mut query
     {
         // Step 1: Calculate DESIRED direction from all influences
         let mut combined_direction = Vec2::ZERO;
@@ -40,13 +39,8 @@ pub fn resolve_movement(
 
         // Cohesion contribution
         if let Some(cohesion) = cohesion_opt {
-            let steering = calculate_cohesion_steering(
-                entity,
-                transform,
-                cohesion,
-                &spatial_grid,
-                &positions,
-            );
+            let steering =
+                calculate_cohesion_steering(entity, transform, cohesion, &spatial_grid, &positions);
             combined_direction += steering.normalize_or_zero() * cohesion.weight;
             total_weight += cohesion.weight;
         }

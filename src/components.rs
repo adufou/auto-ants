@@ -1,8 +1,8 @@
-pub mod markers;
 pub mod camera;
+pub mod markers;
 pub mod movement;
 
 // Re-export all public items
-pub use markers::{GrassTile, WaterTile, Human};
 pub use camera::ChunkPosition;
-pub use movement::{MovementVelocity, RandomWalkInfluence, CohesionInfluence, CurrentDirection};
+pub use markers::{GrassTile, Human, WaterTile};
+pub use movement::{CohesionInfluence, CurrentDirection, MovementVelocity, RandomWalkInfluence};

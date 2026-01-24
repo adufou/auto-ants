@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
 /// World size configuration (16x16 chunk world)
-pub const WORLD_MIN_CHUNK: i32 = -8;   // Minimum chunk coordinate
-pub const WORLD_MAX_CHUNK: i32 = 7;    // Maximum chunk coordinate
+pub const WORLD_MIN_CHUNK: i32 = -8; // Minimum chunk coordinate
+pub const WORLD_MAX_CHUNK: i32 = 7; // Maximum chunk coordinate
 
 /// Configuration for procedural terrain generation
 #[derive(Resource, Debug, Clone)]

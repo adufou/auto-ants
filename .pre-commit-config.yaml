@@ -1,0 +1,35 @@
+# Pre-commit hooks configuration
+# See https://pre-commit.com for more information
+
+repos:
+  # Rust hooks - using local hooks for auto-staging
+  - repo: local
+    hooks:
+      - id: cargo-fmt-autoadd
+        name: cargo fmt (auto-stage)
+        description: Format Rust code and auto-stage changes
+        entry: bash -c 'cargo fmt --all && git add -u'
+        language: system
+        pass_filenames: false
+        types: [rust]
+
+      - id: cargo-check
+        name: cargo check
+        description: Check that Rust code compiles
+        entry: cargo check
+        language: system
+        pass_filenames: false
+        types: [rust]
+
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+        types: [rust]
+      - id: trailing-whitespace
+        types: [rust]

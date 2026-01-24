@@ -9,7 +9,10 @@ pub struct EntityAssets {
 }
 
 impl EntityAssets {
-    pub fn new(texture_handle: Handle<Image>, texture_atlas_layout: Handle<TextureAtlasLayout>) -> Self {
+    pub fn new(
+        texture_handle: Handle<Image>,
+        texture_atlas_layout: Handle<TextureAtlasLayout>,
+    ) -> Self {
         Self {
             texture_handle,
             texture_atlas_layout,

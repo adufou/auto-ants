@@ -1,0 +1,22 @@
+# Rust formatting configuration
+edition = "2024"
+
+# Stable options
+max_width = 100
+hard_tabs = false
+tab_spaces = 4
+newline_style = "Unix"
+use_small_heuristics = "Default"
+reorder_imports = true
+reorder_modules = true
+remove_nested_parens = true
+
+# Note: The following options require nightly Rust:
+# - format_strings
+# - imports_granularity
+# - group_imports
+# - fn_params_layout
+#
+# To use these features, install nightly with:
+# rustup toolchain install nightly
+# Then run: cargo +nightly fmt
