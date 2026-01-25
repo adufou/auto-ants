@@ -19,7 +19,7 @@ pub struct RelationshipInfluence {
 impl Default for RelationshipInfluence {
     fn default() -> Self {
         Self {
-            perception_radius: 256.0, // Match cohesion for consistency
+            perception_radius: 16.0,  // Match cohesion for consistency
             weight: 1.0,              // Equal weight with other influences
             attraction_strength: 1.0, // 1:1 relationship to movement
             repulsion_strength: 1.0,  // 1:1 relationship to movement

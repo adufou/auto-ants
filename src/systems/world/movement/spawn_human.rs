@@ -66,13 +66,18 @@ pub fn spawn_human(
                 RandomWalkInfluence {
                     direction: Vec2::new(angle.cos(), angle.sin()),
                     direction_change_rate: 2.0 * PI,
-                    weight: 1.0,
+                    weight: 2.0,
                 },
                 CohesionInfluence {
                     perception_radius: 256.0,
                     weight: 1.0,
                 },
-                RelationshipInfluence::default(),
+                RelationshipInfluence {
+                    perception_radius: 256.0,
+                    weight: 1.0,
+                    attraction_strength: 1.0,
+                    repulsion_strength: 1.0,
+                },
                 CurrentDirection {
                     direction: Vec2::new(angle.cos(), angle.sin()),
                 },
