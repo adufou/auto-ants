@@ -25,15 +25,16 @@ pub fn apply_tanh_modifier(current_relationship: f32, base_change: f32) -> f32 {
     }
 }
 
-/// Calculate selection weight for a relationship topic using tanh(2x).
+/// Calculate selection weight for a relationship topic using linear scaling.
 /// Stronger opinions (positive or negative) have higher selection probability.
 ///
 /// # Examples
-/// - relationship = 0.0 → weight = 0.0 (neutral, rarely discussed)
-/// - relationship = ±0.5 → weight = 0.76
-/// - relationship = ±0.9 → weight = 0.97
+/// - relationship = 0.0 → weight = 0.0 (neutral, never discussed)
+/// - relationship = ±0.25 → weight = 0.0625 (6.25%)
+/// - relationship = ±0.5 → weight = 0.125 (12.5%)
+/// - relationship = ±1.0 → weight = 0.25 (25%)
 ///
 /// Using absolute value means both love and hate are equally "interesting" topics.
 pub fn calculate_topic_weight(relationship: f32) -> f32 {
-    (2.0 * relationship.abs()).tanh()
+    relationship.abs() / 4.0
 }
