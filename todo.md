@@ -2,3 +2,4 @@
 - pause du jeu
 - hover sur les humains : afficher les relations (liens entre les humains, rouge = enemi, vert = ami, blanc = neutre)
 - UI button pour afficher debug "UI" (circle de vision, direction actuelle, direction désirée) sur les humains
+- revoir les methods apply_tanh_modifier et leurs utilisationns, peut etre que d'autres fonctions seraien tmeilleuirs pour pas etre coincé aux extreme ? 
