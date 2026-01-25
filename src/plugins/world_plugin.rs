@@ -8,8 +8,8 @@ use crate::systems::camera::{
 use crate::systems::debug::{performance_monitor, terrain_tuning, vision_debug_gizmos};
 use crate::systems::world::{
     apply_movement, calculate_random_walk, generate_world, resolve_movement, setup_entities,
-    setup_tilemap, share_relationship_opinions, spawn_human, update_close_humans_relationships,
-    update_spatial_grid,
+    setup_tilemap, share_relationship_opinions, spawn_boundary_walls, spawn_human,
+    update_close_humans_relationships, update_spatial_grid,
 };
 use avian2d::prelude::*;
 use bevy::prelude::*;
@@ -28,7 +28,10 @@ impl Plugin for WorldPlugin {
         app.insert_resource(SpatialGrid::new(300.0));
 
         // Startup systems (generate_world must run after setup_tilemap to access TilemapAssets)
-        app.add_systems(Startup, (setup_tilemap, setup_entities).chain());
+        app.add_systems(
+            Startup,
+            (setup_tilemap, setup_entities, spawn_boundary_walls).chain(),
+        );
         app.add_systems(Startup, generate_world.after(setup_tilemap));
 
         // Update systems

@@ -117,7 +117,7 @@ fn spawn_chunk(
         texture: TilemapTexture::Single(assets.texture_handle.clone()),
         tile_size: TilemapTileSize { x: 16.0, y: 16.0 },
         map_type: TilemapType::Square,
-        anchor: TilemapAnchor::Center,
+        anchor: TilemapAnchor::BottomLeft,
         transform: Transform::from_xyz(chunk_world_x, chunk_world_y, 0.0),
         ..Default::default()
     });
