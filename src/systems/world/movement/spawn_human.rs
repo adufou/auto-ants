@@ -1,6 +1,6 @@
 use crate::components::{
-    CohesionInfluence, CurrentDirection, DesiredDirection, Human, HumanPhysics, HumanRelationships,
-    MovementVelocity, RandomWalkInfluence, RelationshipInfluence,
+    CenterPullInfluence, CohesionInfluence, CurrentDirection, DesiredDirection, Human,
+    HumanPhysics, HumanRelationships, MovementVelocity, RandomWalkInfluence, RelationshipInfluence,
 };
 use crate::resources::{EntityAssets, PhysicsConfig};
 use bevy::prelude::*;
@@ -78,6 +78,7 @@ pub fn spawn_human(
                     attraction_strength: 1.0,
                     repulsion_strength: 1.0,
                 },
+                CenterPullInfluence { weight: 1.0 },
                 CurrentDirection {
                     direction: Vec2::new(angle.cos(), angle.sin()),
                 },

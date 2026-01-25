@@ -1,10 +1,13 @@
 use crate::components::{
-    CohesionInfluence, CurrentDirection, DesiredDirection, Human, HumanRelationships,
-    MovementVelocity, RandomWalkInfluence, RelationshipInfluence,
+    CenterPullInfluence, CohesionInfluence, CurrentDirection, DesiredDirection, Human,
+    HumanRelationships, MovementVelocity, RandomWalkInfluence, RelationshipInfluence,
 };
 use crate::resources::{MovementConfig, SpatialGrid};
 use bevy::prelude::*;
 use std::f32::consts::PI;
+
+/// World radius: (16 chunks × 16 tiles × 16 pixels) / 2 = 2048
+const WORLD_HALF_SIZE: f32 = 2048.0;
 
 /// System that combines all movement influences into a final velocity
 /// Uses percentage-based weight normalization
@@ -20,6 +23,7 @@ pub fn resolve_movement(
             &RandomWalkInfluence,
             Option<&CohesionInfluence>,
             Option<&RelationshipInfluence>,
+            Option<&CenterPullInfluence>,
             &HumanRelationships,
         ),
         With<Human>,
@@ -40,6 +44,7 @@ pub fn resolve_movement(
         random_walk,
         cohesion_opt,
         relationship_opt,
+        center_pull_opt,
         relationships,
     ) in &mut query
     {
@@ -71,6 +76,13 @@ pub fn resolve_movement(
             );
             combined_direction += steering * relationship_influence.weight;
             total_weight += relationship_influence.weight;
+        }
+
+        // Center pull contribution
+        if let Some(center_pull) = center_pull_opt {
+            let steering = calculate_center_pull_steering(transform);
+            combined_direction += steering * center_pull.weight;
+            total_weight += center_pull.weight;
         }
 
         let desired_direction = if total_weight > 0.0 {
@@ -205,4 +217,27 @@ fn calculate_relationship_steering(
     }
 
     steering.normalize_or_zero()
+}
+
+/// Calculate the steering force for center pull behavior
+/// Returns a force vector pointing toward world origin (0, 0)
+/// Strength increases exponentially as (distance/radius)^5
+fn calculate_center_pull_steering(transform: &Transform) -> Vec2 {
+    let pos = Vec2::new(transform.translation.x, transform.translation.y);
+    let distance_from_center = pos.length();
+
+    // Avoid division by zero at exact center
+    if distance_from_center < 0.01 {
+        return Vec2::ZERO;
+    }
+
+    // Calculate normalized strength: (distance / half_world)^5
+    let normalized_distance = distance_from_center / WORLD_HALF_SIZE;
+    let strength = normalized_distance.powf(5.0);
+
+    // Direction points toward origin: -position.normalize()
+    let direction = -pos.normalize();
+
+    // Return steering force: direction * strength
+    direction * strength
 }

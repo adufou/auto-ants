@@ -15,3 +15,6 @@ pub use desired_direction::DesiredDirection;
 
 mod relationship_influence;
 pub use relationship_influence::RelationshipInfluence;
+
+mod center_pull_influence;
+pub use center_pull_influence::CenterPullInfluence;
