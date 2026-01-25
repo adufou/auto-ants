@@ -10,6 +10,7 @@ pub use camera::ChunkPosition;
 pub use markers::{GrassTile, Human, WaterTile};
 pub use movement::{
     CohesionInfluence, CurrentDirection, DesiredDirection, MovementVelocity, RandomWalkInfluence,
+    RelationshipInfluence,
 };
 pub use physics::HumanPhysics;
 pub use social::HumanRelationships;

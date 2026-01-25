@@ -1,6 +1,6 @@
 use crate::components::{
-    CohesionInfluence, CurrentDirection, DesiredDirection, Human, MovementVelocity,
-    RandomWalkInfluence,
+    CohesionInfluence, CurrentDirection, DesiredDirection, Human, HumanRelationships,
+    MovementVelocity, RandomWalkInfluence, RelationshipInfluence,
 };
 use crate::resources::{MovementConfig, SpatialGrid};
 use bevy::prelude::*;
@@ -19,6 +19,8 @@ pub fn resolve_movement(
             &mut DesiredDirection,
             &RandomWalkInfluence,
             Option<&CohesionInfluence>,
+            Option<&RelationshipInfluence>,
+            &HumanRelationships,
         ),
         With<Human>,
     >,
@@ -37,6 +39,8 @@ pub fn resolve_movement(
         mut desired_dir,
         random_walk,
         cohesion_opt,
+        relationship_opt,
+        relationships,
     ) in &mut query
     {
         // Step 1: Calculate DESIRED direction from all influences
@@ -53,6 +57,20 @@ pub fn resolve_movement(
                 calculate_cohesion_steering(entity, transform, cohesion, &spatial_grid, &positions);
             combined_direction += steering.normalize_or_zero() * cohesion.weight;
             total_weight += cohesion.weight;
+        }
+
+        // Relationship influence contribution
+        if let Some(relationship_influence) = relationship_opt {
+            let steering = calculate_relationship_steering(
+                entity,
+                transform,
+                relationship_influence,
+                relationships,
+                &spatial_grid,
+                &positions,
+            );
+            combined_direction += steering * relationship_influence.weight;
+            total_weight += relationship_influence.weight;
         }
 
         let desired_direction = if total_weight > 0.0 {
@@ -132,4 +150,59 @@ fn calculate_cohesion_steering(
     } else {
         Vec2::ZERO
     }
+}
+
+/// Calculate the steering force based on relationships with nearby entities
+/// Returns a normalized direction vector pointing:
+/// - TOWARD allies (positive relationships)
+/// - AWAY FROM enemies (negative relationships)
+fn calculate_relationship_steering(
+    entity: Entity,
+    transform: &Transform,
+    relationship_influence: &RelationshipInfluence,
+    relationships: &HumanRelationships,
+    spatial_grid: &SpatialGrid,
+    positions: &Query<&Transform, With<Human>>,
+) -> Vec2 {
+    let pos = Vec2::new(transform.translation.x, transform.translation.y);
+    let neighbors = spatial_grid.query_neighbors(pos, relationship_influence.perception_radius);
+
+    let mut steering = Vec2::ZERO;
+
+    for neighbor_entity in neighbors {
+        if neighbor_entity == entity {
+            continue; // Skip self
+        }
+
+        if let Ok(neighbor_transform) = positions.get(neighbor_entity) {
+            let neighbor_pos = Vec2::new(
+                neighbor_transform.translation.x,
+                neighbor_transform.translation.y,
+            );
+            let distance = pos.distance(neighbor_pos);
+
+            if distance < relationship_influence.perception_radius && distance > 0.01 {
+                let relationship_score = relationships.get_relationship(neighbor_entity);
+
+                // Skip if no relationship (neutral/unknown)
+                if relationship_score.abs() < 0.01 {
+                    continue;
+                }
+
+                let direction = (neighbor_pos - pos).normalize_or_zero();
+
+                if relationship_score > 0.0 {
+                    // Positive = ally = move TOWARD
+                    steering +=
+                        direction * relationship_score * relationship_influence.attraction_strength;
+                } else {
+                    // Negative = enemy = move AWAY (score is already negative)
+                    steering +=
+                        direction * relationship_score * relationship_influence.repulsion_strength;
+                }
+            }
+        }
+    }
+
+    steering.normalize_or_zero()
 }

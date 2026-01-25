@@ -12,3 +12,6 @@ pub use current_direction::CurrentDirection;
 
 mod desired_direction;
 pub use desired_direction::DesiredDirection;
+
+mod relationship_influence;
+pub use relationship_influence::RelationshipInfluence;
